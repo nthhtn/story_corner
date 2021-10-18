@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Login</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+		integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+		crossorigin="anonymous" />
+	<link rel="stylesheet" id="css-main" type="text/css" href="/assets/oneui/css/oneui.min.css">
+	<script type="text/javascript" src="/assets/oneui/js/oneui.core.min.js"></script>
+	<script type="text/javascript" src="/assets/oneui/js/oneui.app.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"
+		integrity="sha512-F5QTlBqZlvuBEs9LQPqc1iZv2UMxcVXezbHzomzS6Df4MZMClge/8+gXrKw2fl5ysdk4rWjR0vKS7NNkfymaBQ=="
+		crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<div id="page-container">
+		<main id="main-container">
+			<div class="bg-image">
+				<div class="hero-static bg-white-95">
+					<div class="content">
+						<div class="row justify-content-center">
+							<div class="col-md-8 col-lg-6 col-xl-4">
+								<div class="block block-themed block-fx-shadow mb-0">
+									<div class="block-header">
+										<h3 class="block-title">Log in</h3>
+										<div class="block-options">
+											<a class="btn-block-option font-size-sm" href="#">Forgot
+												Password?</a>
+										</div>
+									</div>
+									<div class="block-content">
+										<div class="p-sm-3 px-lg-4 py-lg-5">
+											<p>Welcome, please login.</p>
+											<div class="js-validation-signin">
+												<div class="py-3">
+													<div class="form-group">
+														<input type="text"
+															class="form-control form-control-alt form-control-lg"
+															id="login-username" name="login-username"
+															placeholder="Username">
+													</div>
+													<div class="form-group">
+														<input type="password"
+															class="form-control form-control-alt form-control-lg"
+															id="login-password" name="login-password"
+															placeholder="Password">
+													</div>
+												</div>
+												<div class="form-group row">
+													<div class="col-md-12 col-xl-12">
+														<label class="d-block" id="login-error"
+															style="color: red;"></label>
+													</div>
+												</div>
+												<div class="form-group row">
+													<div class="col-md-6 col-xl-5">
+														<button class="btn btn-block btn-primary" id="login-button">
+															<i class="fa fa-fw fa-sign-in-alt mr-1"></i> Log in
+														</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="content content-full font-size-sm text-muted text-center">
+						<strong>OneUI 4.2</strong> &copy; <span data-toggle="year-copy"></span>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+	<script>
+		$('#login-button').click(() => {
+			var username = $('#login-username').val();
+			var password = $('#login-password').val();
+			if (!username || !password) {
+				$('#login-error').text('Missing required field(s)');
+			}
+			$.ajax({
+				url: '/login',
+				method: 'POST',
+				data: {
+					username: username,
+					password: password
+				},
+				success: (response) => {
+					console.log(response);
+					window.location.href = "/dashboard";
+				},
+				error: (result) => {
+					console.log(error);
+				}
+			})
+		});
+	</script>
+
+</body>
+
+</html>
