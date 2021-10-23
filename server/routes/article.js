@@ -52,7 +52,8 @@ router.route('/')
 				title,
 				content,
 				coverImg: `/uploads/img/articles/${encryptedId}/cover/${encrypted_filename}`,
-				categoryId
+				categoryId,
+				authorId: req.user._id
 			};
 			let article = new Article(fields);
 			await article.save();
@@ -87,6 +88,7 @@ router.route('/title/:title')
 	.get(async (req, res) => {
 		const article = await Article.findOne({ title: req.params.title })
 			.populate({ path: 'tags', select: 'tagValue' })
+			.populate({ path: 'authorId', select: ['fullName', 'brief', 'avatar'] })
 			.populate({ path: 'categoryId', select: 'displayName' })
 			.exec();
 		return res.json({ success: true, result: article });

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'react-js-pagination';
-// import ReactHtmlParser from 'react-html-parser';
+import ReactHtmlParser from 'react-html-parser';
 
 import { listArticles } from '../actions/article';
-// import Sidebar from './Sidebar';
+import Sidebar from './Sidebar';
 
 class ArticleItem extends Component {
 
@@ -14,7 +14,7 @@ class ArticleItem extends Component {
 	}
 
 	render() {
-		const { _id, title, content, coverImg, createdAt } = this.props;
+		const { _id, title, content, coverImg, createdAt, categoryId } = this.props;
 		return (
 			<article id="post-3000"
 				className="post-3000 post type-post status-publish format-standard has-post-thumbnail hentry category-tan-man tag-tanman">
@@ -45,29 +45,29 @@ class ArticleItem extends Component {
 				</div>
 
 				<header className="entry-header">
-					<span className="cat-links"><span className="screen-reader-text">Posted in</span> <a
-						href="https://gocnhoannie.com/tan-man/" rel="category tag">Tản mạn</a></span>
+					<span className="cat-links"><span className="screen-reader-text">Posted in&nbsp;</span> <a
+						href={"/articles/category/" + categoryId.displayName} rel="category tag">{categoryId.displayName}</a></span>
 					<h2 className="entry-title"><a
-						href="https://gocnhoannie.com/nghi-ngoi-cung-la-mot-phan-cua-qua-trinh/"
+						href={"/articles/" + title}
 						rel="bookmark">{title}</a></h2>
 					<div className="entry-meta">
 						<span className="posted-on">
-							<a href="https://gocnhoannie.com/nghi-ngoi-cung-la-mot-phan-cua-qua-trinh/" rel="bookmark"><time className="entry-date published" dateTime={createdAt}>{createdAt}</time><time
-								className="updated" dateTime={createdAt}>{createdAt}</time></a></span><span className="byline"> by
-							<span className="author vcard"><a className="url fn n" href="https://gocnhoannie.com/author/gocnhoannie/">Annie</a></span>
+							<a href="https://gocnhoannie.com/nghi-ngoi-cung-la-mot-phan-cua-qua-trinh/" rel="bookmark">
+								<time className="entry-date published" dateTime={createdAt}>{createdAt}</time>
+								<time className="updated" dateTime={createdAt}>{createdAt}</time></a></span><span className="byline"> by&nbsp;
+							<span className="author vcard"><a className="url fn n" href={"/articles/" + title}>Annie</a></span>
 						</span>
 					</div>
 				</header>
 
 				<div className="entry-content">
 
-					<p>Vì giãn cách xã hội do Covid, phần vừa mới nghỉ việc và ở nhà tự học, đôi khi mình
-						cũng có chút sốt ruột. Mình tự hỏi, khi chuỗi ngày nghỉ này qua đi, mọi thứ trở lại
-						bình thường, chuyện gì sẽ xảy ra với mình? <a
-							href="https://gocnhoannie.com/nghi-ngoi-cung-la-mot-phan-cua-qua-trinh/#more-3000"
-							className="more-link">Continue reading <span className="screen-reader-text">&#8220;Nghỉ
-								ngơi cũng là một phần của quá trình&#8221;</span> <span
-									className="meta-nav">&rarr;</span></a></p>
+					<p>{ReactHtmlParser(content)}
+						<a href={"/articles/" + title} className="more-link">
+							Continue reading
+							<span className="screen-reader-text">&#8220;{title}&#8221;</span>
+							<span className="meta-nav">&rarr;</span></a>
+					</p>
 				</div>
 
 			</article>
@@ -88,7 +88,6 @@ export default class Home extends Component {
 	}
 
 	render() {
-		console.log(this.props.article.list);
 		return (
 			<div id="content" className="site-content">
 				<div className="wrap">
@@ -98,7 +97,7 @@ export default class Home extends Component {
 							{this.props.article.list.map((item, i) => {
 								const components = [<ArticleItem {...item} key={item._id} />];
 								if (i < this.props.article.list.length - 1) {
-									const separator = <div className="separator"><svg className="pencil-sharpener" version="1.1" x="0px" y="0px"
+									const separator = <div className="separator" key={"separator" + item._id}><svg className="pencil-sharpener" version="1.1" x="0px" y="0px"
 										width="48px" height="79.5px" viewBox="0 0 48 79.5"
 										style={{ enableBackground: "new 0 0 48 79.5" }} aria-hidden="true">
 										<g>
@@ -126,6 +125,7 @@ export default class Home extends Component {
 
 						</main>
 					</div>
+					<Sidebar />
 				</div>
 			</div>
 		);

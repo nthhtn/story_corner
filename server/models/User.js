@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         default: 'guest'
+    },
+    avatar: {
+        type: String,
+        default: ""
     }
 });
 

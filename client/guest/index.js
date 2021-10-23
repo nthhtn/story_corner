@@ -136,8 +136,8 @@ store.dispatch(getMyProfile())
 											</svg>
 										</div>
 									</div>
-									<a href="https://gocnhoannie.com/" className="site-logo-link" rel="home" itemProp="url"></a>
-									<h1 className="site-title"><a href="https://gocnhoannie.com/" rel="home">Góc nhỏ của Annie</a></h1>
+									<a href="/" className="site-logo-link" rel="home" itemProp="url"></a>
+									<h1 className="site-title"><a href="/" rel="home">Story's Corner</a></h1>
 									<p className="site-description">Viết review và kể chuyện về cuộc đời</p>
 								</div>
 							</div>

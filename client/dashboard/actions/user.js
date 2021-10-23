@@ -39,4 +39,4 @@ export function updateMyProfile(me) {
 				return dispatch(updateMyProfileError(JSON.parse(error)));
 			})
 	};
-}
+};
