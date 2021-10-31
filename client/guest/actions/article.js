@@ -34,13 +34,25 @@ export function listArticlesByCategory(category, page = 1, limit = 10) {
 	};
 };
 
+function listArticlesByTagSuccess(list, page, count) {
+	return { type: 'LIST_ARTICLES_BY_TAG', list, page, count };
+};
+
+export function listArticlesByTag(tag, page = 1, limit = 10) {
+	return async (dispatch) => {
+		const response = await fetch(`/api/articles/tag/${tag}?page=${page}&limit=${limit}`, { credentials: 'same-origin' });
+		const responseJson = await response.json();
+		return dispatch(listArticlesByTagSuccess(responseJson.result, page, responseJson.count));
+	};
+};
+
 function searchArticlesSuccess(list, page, count) {
 	return { type: 'SEARCH_ARTICLES', list, page, count };
 };
 
-export function searchArticles(keyword, category, page = 1, limit = 10) {
+export function searchArticles(keyword, page = 1, limit = 10) {
 	return async (dispatch) => {
-		const response = await fetch(`/api/articles/search?keyword=${keyword}&category=${category}&page=${page}&limit=${limit}`, { credentials: 'same-origin' });
+		const response = await fetch(`/api/articles/search?keyword=${keyword}&page=${page}&limit=${limit}`, { credentials: 'same-origin' });
 		const responseJson = await response.json();
 		return dispatch(searchArticlesSuccess(responseJson.result, page, responseJson.count));
 	};

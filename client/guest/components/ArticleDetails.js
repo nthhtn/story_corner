@@ -20,7 +20,6 @@ export default class ArticleDetails extends Component {
 
 	render() {
 		const { current } = this.props.article;
-		console.log(current);
 		return (
 			<div id="content" className="site-content single">
 				<div className="wrap">
@@ -32,18 +31,30 @@ export default class ArticleDetails extends Component {
 										<svg className="paperclip" version="1.1" id="Layer_1" x="0px" y="0px" width="168px" height="569px" viewBox="0 0 168 569" style={{ enableBackground: "new 0 0 168 569" }} aria-hidden="true">
 											<path className="paperclip0" d="M96,0C49.7,0,24,37.7,24,84v63l18,6V84c0-36.4,17.6-66,54-66s54,29.6,54,66v401c0,36.4-29.6,66-66,66s-66-29.6-66-66V285H0v200c0,46.3,37.7,84,84,84s84-37.7,84-84V84C168,37.7,142.3,0,96,0z"></path>
 										</svg>
-										<img width="1000" height="627" src="https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-1000x627.jpg" className="attachment-scratchpad-featured size-scratchpad-featured wp-post-image" alt="" loading="lazy" srcSet="https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-1000x627.jpg 1000w, https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-300x188.jpg 300w, https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-700x439.jpg 700w, https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-768x482.jpg 768w, https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-1536x964.jpg 1536w, https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-478x300.jpg 478w, https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462.jpg 2048w" sizes="(max-width: 1000px) 100vw, 1000px" data-attachment-id="3012" data-permalink="https://gocnhoannie.com/nghi-ngoi-cung-la-mot-phan-cua-qua-trinh/nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-2/" data-orig-file="https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462.jpg" data-orig-size="2048,1285" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="Nghỉ ngơi cũng là một phần của quá trình" data-image-description="" data-image-caption="" data-medium-file="https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-300x188.jpg" data-large-file="https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-700x439.jpg" />			</span>
+										<img maxwidth="1000" maxheight="627"
+											src={current?.coverImg}
+											className="attachment-scratchpad-featured size-scratchpad-featured wp-post-image"
+											alt="" loading="lazy"
+											srcSet={current?.coverImg}
+											data-permalink={`/articles/${current?.title}`}
+											data-orig-file={current?.coverImg}
+											data-image-title={current?.title}
+										/>
+									</span>
 								</div>
 
 								<header className="entry-header">
 									<span className="cat-links"><span className="screen-reader-text">Posted in&nbsp;</span>
-										<a href={"/articles/category/" + current?.categoryId.displayName} rel="category tag">{current?.categoryId.displayName}</a>
+										<a href={"/articles/category/" + current?.categoryId.name} rel="category tag">{current?.categoryId.displayName}</a>
 									</span>
 									<h1 className="entry-title">{current?.title}</h1>
 									<div className="entry-meta">
-										<span className="posted-on">Posted on <a href={"/articles/" + current?.title} rel="bookmark">
-											<time className="entry-date published" dateTime={current?.createdAt}>{current?.createdAt}</time>
-											<time className="updated" dateTime="2021-09-17T09:05:02+07:00">Tháng Chín 17, 2021</time></a>
+										<span className="posted-on">Posted on&nbsp;
+											<a href={"/articles/" + current?.title} rel="bookmark">
+												<time className="entry-date published" dateTime={current?.createdAt}>
+													{!current?.createdAt ? '' : $.format.date(current?.createdAt, "dd/MM/yyyy")}
+												</time>
+											</a>
 										</span>
 										<span className="byline"> by
 											<span className="author vcard">
@@ -92,13 +103,13 @@ export default class ArticleDetails extends Component {
 								<footer className="entry-footer">
 									<span className="tags-links">
 										<span className="tags-header">Tagged:&nbsp;</span>
-										{current?.tags.map((tag) => (<a href="https://gocnhoannie.com/tag/tanman/" rel="tag" key={tag._id}>#{tag.tagValue}&nbsp;</a>))}
+										{current?.tags.map((tag) => (<a href={"/articles/tag/" + tag.tagValue} rel="tag" key={tag._id}>#{tag.tagValue}&nbsp;</a>))}
 									</span>
 								</footer>
 							</article>
 						</main>
 					</div>
-				
+
 					<Sidebar />
 				</div>
 			</div>

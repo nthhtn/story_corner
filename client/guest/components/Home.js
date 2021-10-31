@@ -5,76 +5,8 @@ import ReactHtmlParser from 'react-html-parser';
 
 import { listArticles } from '../actions/article';
 import Sidebar from './Sidebar';
-
-class ArticleItem extends Component {
-
-	constructor(props) {
-		super(props);
-		this.state = {}
-	}
-
-	render() {
-		const { _id, title, content, coverImg, createdAt, categoryId } = this.props;
-		return (
-			<article id="post-3000"
-				className="post-3000 post type-post status-publish format-standard has-post-thumbnail hentry category-tan-man tag-tanman">
-
-				<div className="featured-image">
-					<a href={`/articles/${title}`}>
-						<svg className="paperclip" version="1.1" id="Layer_1" x="0px" y="0px" width="168px"
-							height="569px" viewBox="0 0 168 569" style={{ "enableBackground": "new 0 0 168 569" }}
-							aria-hidden="true">
-							<path className="paperclip0"
-								d="M96,0C49.7,0,24,37.7,24,84v63l18,6V84c0-36.4,17.6-66,54-66s54,29.6,54,66v401c0,36.4-29.6,66-66,66s-66-29.6-66-66V285H0v200c0,46.3,37.7,84,84,84s84-37.7,84-84V84C168,37.7,142.3,0,96,0z" />
-						</svg>
-						<img width="1000" height="627"
-							src={coverImg}
-							className="attachment-scratchpad-featured size-scratchpad-featured wp-post-image"
-							alt="" loading="lazy"
-							srcSet="https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-1000x627.jpg 1000w, https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-300x188.jpg 300w, https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-700x439.jpg 700w, https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-768x482.jpg 768w, https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-1536x964.jpg 1536w, https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-478x300.jpg 478w, https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462.jpg 2048w"
-							sizes="(max-width: 1000px) 100vw, 1000px" data-attachment-id="3012"
-							data-permalink="https://gocnhoannie.com/nghi-ngoi-cung-la-mot-phan-cua-qua-trinh/nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-2/"
-							data-orig-file="https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462.jpg"
-							data-orig-size="2048,1285" data-comments-opened="1"
-							data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}"
-							data-image-title="Nghỉ ngơi cũng là một phần của quá trình"
-							data-image-description="" data-image-caption=""
-							data-medium-file="https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-300x188.jpg"
-							data-large-file="https://gocnhoannie.com/wp-content/uploads/2021/09/Nghi-ngoi-cung-la-mot-phan-cua-qua-trinh-e1631717338462-700x439.jpg" />
-					</a>
-				</div>
-
-				<header className="entry-header">
-					<span className="cat-links"><span className="screen-reader-text">Posted in&nbsp;</span> <a
-						href={"/articles/category/" + categoryId.displayName} rel="category tag">{categoryId.displayName}</a></span>
-					<h2 className="entry-title"><a
-						href={"/articles/" + title}
-						rel="bookmark">{title}</a></h2>
-					<div className="entry-meta">
-						<span className="posted-on">
-							<a href="https://gocnhoannie.com/nghi-ngoi-cung-la-mot-phan-cua-qua-trinh/" rel="bookmark">
-								<time className="entry-date published" dateTime={createdAt}>{createdAt}</time>
-								<time className="updated" dateTime={createdAt}>{createdAt}</time></a></span><span className="byline"> by&nbsp;
-							<span className="author vcard"><a className="url fn n" href={"/articles/" + title}>Annie</a></span>
-						</span>
-					</div>
-				</header>
-
-				<div className="entry-content">
-
-					<p>{ReactHtmlParser(content)}
-						<a href={"/articles/" + title} className="more-link">
-							Continue reading
-							<span className="screen-reader-text">&#8220;{title}&#8221;</span>
-							<span className="meta-nav">&rarr;</span></a>
-					</p>
-				</div>
-
-			</article>
-		);
-	}
-
-}
+import ArticleItem from './ArticleItem';
+import { getBriefHtmlContent } from '../helpers';
 
 export default class Home extends Component {
 

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 
-import { listCategories } from '../actions/category';
-
 var self;
 
 export default class Sidebar extends Component {
@@ -10,12 +8,22 @@ export default class Sidebar extends Component {
 	constructor(props) {
 		super(props);
 		const query = qs.parse(this.props.location?.search, { ignoreQueryPrefix: true });
-		const category = query.category ? query.category.split(',') : [];
 		this.state = {
-			selected: category,
 			keyword: query.keyword || ''
 		};
 		self = this;
+	}
+
+	triggerSearch(e) {
+		e.preventDefault();
+		const keyword = $('#search-keyword').val();
+		if (keyword.length < 3) {
+			return;
+		}
+		window.open(
+			`/articles/search?keyword=${keyword}`,
+			'_blank'
+		);
 	}
 
 	render() {
@@ -25,9 +33,13 @@ export default class Sidebar extends Component {
 					<div role="search" className="search-form">
 						<label>
 							<span className="screen-reader-text">Tìm kiếm cho:</span>
-							<input type="search" className="search-field" placeholder="Tìm kiếm …" value="" name="s" />
+							<input type="search" className="search-field" id="search-keyword" placeholder="Tìm kiếm…"
+								onKeyUp={(e) => {
+									if (e.key === 'Enter') { $('#search-button').trigger('click'); }
+								}} />
 						</label>
-						<input type="submit" className="search-submit" value="Tìm kiếm" />
+						<input type="submit" className="search-submit" id="search-button" value="Tìm kiếm" onClick={this.triggerSearch.bind(this)}>
+						</input>
 					</div>
 				</section>
 			</aside>

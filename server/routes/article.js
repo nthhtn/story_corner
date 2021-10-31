@@ -78,7 +78,7 @@ router.route('/')
 		}
 		const result = await Article.find(filter_options).sort({ createdAt: -1 })
 			.skip((page - 1) * limit).limit(limit)
-			.populate({ path: 'categoryId', select: 'displayName' })
+			.populate({ path: 'categoryId', select: ['name', 'displayName'] })
 			.exec();
 		const count = await Article.countDocuments({});
 		return res.json({ success: true, result, count });
@@ -89,7 +89,7 @@ router.route('/title/:title')
 		const article = await Article.findOne({ title: req.params.title })
 			.populate({ path: 'tags', select: 'tagValue' })
 			.populate({ path: 'authorId', select: ['fullName', 'brief', 'avatar'] })
-			.populate({ path: 'categoryId', select: 'displayName' })
+			.populate({ path: 'categoryId', select: ['name', 'displayName'] })
 			.exec();
 		return res.json({ success: true, result: article });
 	});
@@ -101,9 +101,21 @@ router.route('/category/:category')
 		const category = await Category.findOne({ name: req.params.category });
 		const result = await Article.find({ categoryId: category._id }).sort({ createdAt: -1 })
 			.skip((page - 1) * limit).limit(limit)
-			.populate({ path: 'categoryId', select: 'displayName' })
 			.exec();
 		const count = await Article.countDocuments({ categoryId: category._id });
+		return res.json({ success: true, result, count });
+	});
+
+router.route('/tag/:tag')
+	.get(async (req, res) => {
+		const page = req.query.page ? Number(req.query.page) : 1;
+		const limit = req.query.limit ? Number(req.query.limit) : 5;
+		const tag = await Tag.findOne({ tagValue: req.params.tag });
+		const result = await Article.find({ tags: { $in: [tag._id] } }).sort({ createdAt: -1 })
+			.skip((page - 1) * limit).limit(limit)
+			.populate({ path: 'categoryId', select: ['name', 'displayName'] })
+			.exec();
+		const count = await Article.countDocuments({ tags: { $in: [tag._id] } });
 		return res.json({ success: true, result, count });
 	});
 
@@ -112,10 +124,6 @@ router.route('/search')
 		const page = req.query.page ? Number(req.query.page) : 1;
 		const limit = req.query.limit ? Number(req.query.limit) : 5;
 		let filterOptions = Object.assign({});
-		if (req.query.category) {
-			const categoryIds = (req.query.category || '').split(',');
-			filterOptions.categoryId = { $in: categoryIds };
-		}
 		if (req.query.keyword) {
 			const keyword = req.query.keyword || '';
 			const regexFilter = { $regex: new RegExp(keyword, 'gi') };
@@ -124,7 +132,7 @@ router.route('/search')
 		const result = await Article.find(filterOptions)
 			.sort({ createdAt: -1 })
 			.skip((page - 1) * limit).limit(limit)
-			.populate({ path: 'categoryId', select: 'displayName' })
+			.populate({ path: 'categoryId', select: ['name', 'displayName'] })
 			.exec();
 		const count = await Article.countDocuments(filterOptions);
 		return res.json({ success: true, result, count });

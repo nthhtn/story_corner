@@ -3,30 +3,29 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import Pagination from 'react-js-pagination';
 import ReactHtmlParser from 'react-html-parser';
 import { Helmet } from 'react-helmet';
-import qs from 'qs';
 
-import { searchArticles } from '../actions/article';
+import { listArticlesByTag } from '../actions/article';
 import Sidebar from './Sidebar';
 import ArticleItem from './ArticleItem';
 
-export default class SearchResult extends Component {
+export default class ArticleWithTag extends Component {
 
 	constructor(props) {
 		super(props);
-		const query = qs.parse(this.props.location?.search, { ignoreQueryPrefix: true });
 		this.state = {
-			activePage: query.page ? parseInt(query.page) : 1,
-			keyword: query.keyword || ''
+			activePage: 1,
+			tag: this.props.match.params.tag
 		};
 	}
 
 	async componentDidMount() {
-		await this.props.dispatch(searchArticles(this.state.keyword, 1, 5));
+		await this.props.dispatch(listArticlesByTag(this.state.tag, 1, 5));
 	}
 
 	async onPageChange(page) {
-		await this.props.dispatch(searchArticles(this.state.keyword, page, 5));
+		await this.props.dispatch(listArticlesByTag(this.state.tag, page, 5));
 		this.setState({ activePage: page });
+		scrollToElement('articles-wrapper');
 	}
 
 	render() {
@@ -37,7 +36,7 @@ export default class SearchResult extends Component {
 						<main id="main" className="site-main" role="main">
 
 							<header className="page-header">
-								<h1 className="page-title">Kết quả tìm kiếm: <span>{this.state.keyword}</span></h1>
+								<h1 className="page-title">Danh mục: <span>{this.state.tag}</span></h1>
 							</header>
 
 							{this.props.article.list.map((item, i) => {

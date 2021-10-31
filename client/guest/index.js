@@ -42,7 +42,7 @@ store.dispatch(getMyProfile())
 											</li>
 											<li id="menu-item-1913"
 												className="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1913">
-												<a href="#">Review</a>
+												<a href="#">Dịch thuật</a>
 												<ul className="sub-menu">
 													<li id="menu-item-658"
 														className="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-658">

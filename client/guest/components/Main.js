@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import Home from './Home';
 import ArticleDetails from './ArticleDetails';
 import ArticleInCategory from './ArticleInCategory';
-// import SearchResult from './SearchResult';
+import ArticleWithTag from './ArticleWithTag';
+import SearchResult from './SearchResult';
 
 class Main extends Component {
 
@@ -18,7 +19,8 @@ class Main extends Component {
 		return (
 			<Switch>
 				<Route exact path='/articles/category/:category' render={(props) => (<ArticleInCategory {...this.props} {...props} />)} />
-				{/* <Route exact path='/articles/search' render={(props) => (<SearchResult {...this.props} {...props} />)} /> */}
+				<Route exact path='/articles/tag/:tag' render={(props) => (<ArticleWithTag {...this.props} {...props} />)} />
+				<Route exact path='/articles/search' render={(props) => (<SearchResult {...this.props} {...props} />)} />
 				<Route exact path='/articles/:title' render={(props) => (<ArticleDetails {...this.props} {...props} />)} />
 				<Route path='*' render={() => (<Home {...this.props} />)} />
 			</Switch>
