@@ -9,7 +9,9 @@ import mkdirp from 'mkdirp';
 import Article from '../models/Article'
 import Tag from '../models/Tag';
 import Category from '../models/Category';
-import { encrypt, decrypt, truncateEncrypted } from '../helpers/encryption';
+import Comment from '../models/Comment';
+import User from '../models/User';
+import { encrypt, decrypt, truncateEncrypted, hashPassword, generateSalt } from '../helpers/encryption';
 import { encryptId, isLoggedIn } from '../helpers/middleware';
 
 const UPLOAD_FOLDER = `${__dirname}/../../uploads`;
@@ -88,10 +90,71 @@ router.route('/title/:title')
 	.get(async (req, res) => {
 		const article = await Article.findOne({ title: req.params.title })
 			.populate({ path: 'tags', select: 'tagValue' })
-			.populate({ path: 'authorId', select: ['fullName', 'brief', 'avatar'] })
+			.populate({ path: 'authorId', select: ['fullName', 'avatar'] })
 			.populate({ path: 'categoryId', select: ['name', 'displayName'] })
 			.exec();
 		return res.json({ success: true, result: article });
+	});
+
+router.route('/title/:title/comments')
+	.get(async (req, res) => {
+		const article = await Article.findOne({ title: req.params.title });
+		let commentThreads = await Comment.find({ articleId: article._id, parentCommentId: null }).sort({ createdAt: -1 })
+			.populate({ path: 'commenterId', select: ['fullName', 'avatar'] })
+			.lean()
+			.exec();
+		for (let thread of commentThreads) {
+			let subcomments = await Comment.find({ articleId: article._id, parentCommentId: thread._id }).sort({ createdAt: 1 })
+				.populate({ path: 'commenterId', select: ['fullName', 'avatar'] })
+				.exec();
+			thread.subcomments = subcomments;
+		}
+		const count = await Comment.countDocuments({ articleId: article._id });
+		return res.json({ success: true, result: commentThreads, count });
+	})
+	.post(async (req, res) => {
+		const article = await Article.findOne({ title: req.params.title });
+		const { fullName, email, password, text } = req.body;
+		let newCommentData = { text, articleId: article._id };
+		let commenter = Object.assign({});
+		if (req.isAuthenticated()) {
+			newCommentData.commenterId = req.user._id;
+			commenter = {
+				fullName: req.user.fullName,
+				avatar: req.user.avatar
+			};
+		} else {
+			const existingUser = await User.findOne({ email });
+			console.log(existingUser);
+			if (existingUser) {
+				if (existingUser.fullName != fullName) {
+					return res.status(401).json({ success: false, error: 'Your name and email do not match!' });
+				} else if (existingUser.password != hashPassword(password, existingUser.salt)) {
+					return res.status(401).json({ success: false, error: 'Wrong password!' });
+				}
+				newCommentData.commenterId = existingUser._id;
+				commenter = {
+					fullName: existingUser.fullName
+				};
+			} else {
+				const salt = generateSalt();
+				const newUserData = {
+					username: fullName,
+					email,
+					fullName,
+					salt,
+					password: hashPassword(password, salt)
+				};
+				let newUser = new User(newUserData);
+				await newUser.save();
+				newCommentData.commenterId = newUser._id;
+				commenter = { fullName };
+			}
+		}
+		let newComment = new Comment(newCommentData);
+		newComment.save();
+		console.log(commenter);
+		return res.json({ success: true, result: { ...newComment._doc, commenterId: commenter } });
 	});
 
 router.route('/category/:category')

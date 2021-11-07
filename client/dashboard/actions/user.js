@@ -37,6 +37,6 @@ export function updateMyProfile(me) {
 				}
 				const error = await response.text();
 				return dispatch(updateMyProfileError(JSON.parse(error)));
-			})
+			});
 	};
 };

@@ -36,7 +36,7 @@ export default class ArticleWithTag extends Component {
 						<main id="main" className="site-main" role="main">
 
 							<header className="page-header">
-								<h1 className="page-title">Danh mục: <span>{this.state.tag}</span></h1>
+								<h1 className="page-title">Thẻ: <span>#{this.state.tag}</span></h1>
 							</header>
 
 							{this.props.article.list.map((item, i) => {
