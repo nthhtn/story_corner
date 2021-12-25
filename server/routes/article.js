@@ -114,8 +114,8 @@ router.route('/title/:title/comments')
 	})
 	.post(async (req, res) => {
 		const article = await Article.findOne({ title: req.params.title });
-		const { fullName, email, password, text } = req.body;
-		let newCommentData = { text, articleId: article._id };
+		const { fullName, email, password, text, parentCommentId } = req.body;
+		let newCommentData = { text, articleId: article._id, parentCommentId };
 		let commenter = Object.assign({});
 		if (req.isAuthenticated()) {
 			newCommentData.commenterId = req.user._id;
@@ -125,7 +125,6 @@ router.route('/title/:title/comments')
 			};
 		} else {
 			const existingUser = await User.findOne({ email });
-			console.log(existingUser);
 			if (existingUser) {
 				if (existingUser.fullName != fullName) {
 					return res.status(401).json({ success: false, error: 'Your name and email do not match!' });
@@ -139,7 +138,7 @@ router.route('/title/:title/comments')
 			} else {
 				const salt = generateSalt();
 				const newUserData = {
-					username: fullName,
+					username: email,
 					email,
 					fullName,
 					salt,
@@ -151,9 +150,9 @@ router.route('/title/:title/comments')
 				commenter = { fullName };
 			}
 		}
+		console.log(newCommentData);
 		let newComment = new Comment(newCommentData);
 		newComment.save();
-		console.log(commenter);
 		return res.json({ success: true, result: { ...newComment._doc, commenterId: commenter } });
 	});
 

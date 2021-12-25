@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import { Helmet } from 'react-helmet';
+import Swal from 'sweetalert2';
 
 import { getArticleByTitle } from '../actions/article';
 import { listCommentsByArticle, createComment } from '../actions/comment';
@@ -13,7 +14,7 @@ class CommentSub extends Component {
 	}
 
 	render() {
-		const { _id, text, createdAt, subcomments, onReplyBtnClick } = this.props;
+		const { _id, text, createdAt, parentCommentId, onReplyBtnClick } = this.props;
 		const { avatar, fullName } = this.props.commenterId;
 		return (
 			<li className="comment byuser odd alt depth-2">
@@ -21,8 +22,8 @@ class CommentSub extends Component {
 					<footer className="comment-meta">
 						<div className="comment-author vcard">
 							<span className="avatar-container">
-								<img alt="" src={avatar || "https://secure.gravatar.com/avatar/b05111cb7f6fd63a5a70b99312cfbe0c?s=100&amp;r=g"}
-									srcSet={avatar || "https://secure.gravatar.com/avatar/b05111cb7f6fd63a5a70b99312cfbe0c?s=200&amp;r=g 2x"}
+								<img alt="" src={avatar || "/assets/image/anonymous_avatar.png"}
+									srcSet={avatar || "/assets/image/anonymous_avatar.png"}
 									className="avatar avatar-100 photo" height="100" width="100" loading="lazy" />
 							</span>
 							<b className="fn">{fullName}</b>&nbsp;
@@ -42,7 +43,7 @@ class CommentSub extends Component {
 					</div>
 
 					<div className="reply">
-						<a rel="nofollow" className="comment-reply-link" href="#" onClick={(e) => onReplyBtnClick(e, _id)}>
+						<a rel="nofollow" className="comment-reply-link" href="#" onClick={(e) => onReplyBtnClick(e, parentCommentId, text, fullName)}>
 							Trả lời
 						</a>
 					</div>
@@ -88,13 +89,13 @@ class CommentThread extends Component {
 					</div>
 
 					<div className="reply">
-						<a rel="nofollow" className="comment-reply-link" href="#" onClick={(e) => onReplyBtnClick(e, _id)}>
+						<a rel="nofollow" className="comment-reply-link" href="#" onClick={(e) => onReplyBtnClick(e, _id, text, fullName)}>
 							Trả lời
 						</a>
 					</div>
 				</article>
 				<ol className="children">
-					{subcomments.map((comment) =>
+					{subcomments?.map((comment) =>
 						<CommentSub onReplyBtnClick={onReplyBtnClick.bind(this)} key={comment._id} {...comment} />
 					)}
 				</ol>
@@ -116,15 +117,20 @@ export default class ArticleDetails extends Component {
 	async componentDidMount() {
 		await this.props.dispatch(getArticleByTitle(this.state.title));
 		await this.props.dispatch(listCommentsByArticle(this.state.title));
+		console.log(this.props.comment);
 	}
 
-	replyToCommentThread(e, threadId) {
+	replyToCommentThread(e, threadId, text, author) {
 		e.preventDefault();
+		console.log(threadId);
+		console.log(text);
+		console.log(author);
 		const element = document.getElementById("comment-text");
 		const y = element.getBoundingClientRect().top + window.pageYOffset;
 		window.scrollTo({ top: y, behavior: 'smooth' });
 		element.focus();
 		this.setState({ replyToCommentThread: threadId });
+		$('#comment-text').attr('placeholder', 'Trả lời @' + author);
 	}
 
 	async addComment() {
@@ -137,11 +143,27 @@ export default class ArticleDetails extends Component {
 			return;
 		}
 		$('#comment-error').html('');
-		const newComment = { text, fullName, email, password };
+		const newComment = { text, fullName, email, password, parentCommentId: this.state.replyToCommentThread };
 		await this.props.dispatch(createComment(this.state.title, newComment));
-		console.log(this.props.comment);
 		if (this.props.comment.error) {
 			$('#comment-error').html(this.props.comment.error);
+			Swal.fire({
+				title: error,
+				text: 'Đã có lỗi xảy ra, vui lòng thử lại!',
+				icon: 'error',
+				showCancelButton: false,
+				confirmButtonText: 'OK',
+			});
+		} else {
+			$('#respond input').val('');
+			$('#respond textarea').val('');
+			$('#comment-text').attr('placeholder',"Nhập bình luận ở đây");
+			Swal.fire({
+				title: 'Viết bình luận thành công!',
+				icon: 'success',
+				showCancelButton: false,
+				confirmButtonText: 'OK',
+			});
 		}
 	}
 
@@ -223,11 +245,11 @@ export default class ArticleDetails extends Component {
 							<div id="comments" className="comments-area">
 
 								<h2 className="comments-title">
-									{this.props.comment.count} thoughts on “<span>{current?.title}</span>”
+									{this.props.comment?.count} thoughts on “<span>{current?.title}</span>”
 								</h2>
 
 								<ol className="comment-list">
-									{this.props.comment.list.map((thread) =>
+									{this.props.comment?.list?.map((thread) =>
 										<CommentThread onReplyBtnClick={this.replyToCommentThread.bind(this)} key={thread._id} {...thread} />
 									)}
 								</ol>
