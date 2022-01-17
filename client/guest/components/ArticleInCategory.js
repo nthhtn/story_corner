@@ -27,7 +27,6 @@ export default class ArticleInCategory extends Component {
 	async onPageChange(page) {
 		await this.props.dispatch(listArticlesByCategory(this.state.category, page, 5));
 		this.setState({ activePage: page });
-		scrollToElement('articles-wrapper');
 	}
 
 	render() {
@@ -69,6 +68,17 @@ export default class ArticleInCategory extends Component {
 								}
 								return components;
 							})}
+
+							<div className="pagination-container">
+								<Pagination
+									innerClass="custom-pagination"
+									activePage={this.state.activePage}
+									itemsCountPerPage={5}
+									totalItemsCount={this.props.article.count}
+									pageRangeDisplayed={3}
+									onChange={this.onPageChange.bind(this)}
+								/>
+							</div>
 
 						</main>
 					</div>

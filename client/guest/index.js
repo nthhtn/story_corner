@@ -89,7 +89,7 @@ store.dispatch(getMyProfile())
 							<div className="site-branding">
 								<div className="wrap">
 									<div className="header-image-contain">
-										<a href="https://gocnhoannie.com/">
+										<a href="/">
 											<img src="https://gocnhoannie.com/wp-content/uploads/2019/08/goc-nho-annie-header-image.jpg"
 												width="1000" height="250" alt="" className="header-image" />
 										</a>

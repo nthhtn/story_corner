@@ -10,13 +10,13 @@ export default function (state = { list, count, error }, action) {
 				const { comment } = action;
 				const { parentCommentId } = comment;
 				if (!parentCommentId) {
-					return { ...state, list: [...state.list, { ...comment, subcomments: [] }], count: state.count + 1, error: null };
+					return { ...state, list: [{ ...comment, subcomments: [] }, ...state.list], count: state.count + 1, error: null };
 				}
 				const newlist = state.list.map((thread) => {
 					if (thread._id != parentCommentId) {
 						return thread;
 					}
-					thread.subcomments = [comment, ...thread.subcomments];
+					thread.subcomments = [...thread.subcomments, comment];
 					return thread;
 				});
 				return { ...state, list: newlist, count: state.count + 1, error: null };

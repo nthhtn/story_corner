@@ -19,6 +19,11 @@ export default class Home extends Component {
 		await this.props.dispatch(listArticles(1, 5));
 	}
 
+	async onPageChange(page) {
+		await this.props.dispatch(listArticles(page, 5));
+		this.setState({ activePage: page });
+	}
+
 	render() {
 		return (
 			<div id="content" className="site-content">
@@ -54,6 +59,17 @@ export default class Home extends Component {
 								}
 								return components;
 							})}
+
+							<div className="pagination-container">
+								<Pagination
+									innerClass="custom-pagination"
+									activePage={this.state.activePage}
+									itemsCountPerPage={5}
+									totalItemsCount={this.props.article.count}
+									pageRangeDisplayed={3}
+									onChange={this.onPageChange.bind(this)}
+								/>
+							</div>
 
 						</main>
 					</div>
