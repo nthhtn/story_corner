@@ -90,7 +90,7 @@ store.dispatch(getMyProfile())
 								<div className="wrap">
 									<div className="header-image-contain">
 										<a href="/">
-											<img src="https://gocnhoannie.com/wp-content/uploads/2019/08/goc-nho-annie-header-image.jpg"
+											<img src="/assets/image/header.jpg"
 												width="1000" height="250" alt="" className="header-image" />
 										</a>
 										<div className="photo-corners">

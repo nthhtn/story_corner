@@ -3,3 +3,4 @@ uploads/
 dist/
 dotenv
 yarn.lock
+.env
