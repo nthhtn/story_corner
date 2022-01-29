@@ -114,7 +114,7 @@ router.route('/title/:title/comments')
 	})
 	.post(async (req, res) => {
 		const article = await Article.findOne({ title: req.params.title });
-		const { fullName, email, password, text, parentCommentId } = req.body;
+		const { text, parentCommentId } = req.body;
 		let newCommentData = { text, articleId: article._id, parentCommentId };
 		let commenter = Object.assign({});
 		if (req.isAuthenticated()) {
@@ -124,6 +124,7 @@ router.route('/title/:title/comments')
 				avatar: req.user.avatar
 			};
 		} else {
+			const { fullName, email, password } = req.body;
 			const existingUser = await User.findOne({ email });
 			if (existingUser) {
 				if (existingUser.fullName != fullName) {
@@ -150,7 +151,6 @@ router.route('/title/:title/comments')
 				commenter = { fullName };
 			}
 		}
-		console.log(newCommentData);
 		let newComment = new Comment(newCommentData);
 		newComment.save();
 		return res.json({ success: true, result: { ...newComment._doc, commenterId: commenter } });

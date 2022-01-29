@@ -117,14 +117,10 @@ export default class ArticleDetails extends Component {
 	async componentDidMount() {
 		await this.props.dispatch(getArticleByTitle(this.state.title));
 		await this.props.dispatch(listCommentsByArticle(this.state.title));
-		console.log(this.props.comment);
 	}
 
 	replyToCommentThread(e, threadId, text, author) {
 		e.preventDefault();
-		console.log(threadId);
-		console.log(text);
-		console.log(author);
 		const element = document.getElementById("comment-text");
 		const y = element.getBoundingClientRect().top + window.pageYOffset;
 		window.scrollTo({ top: y, behavior: 'smooth' });
@@ -135,15 +131,22 @@ export default class ArticleDetails extends Component {
 
 	async addComment() {
 		const text = $('#comment-text').val();
-		const fullName = $('#author').val();
-		const email = $('#email').val();
-		const password = $('#password').val();
-		if (!text || !fullName || !email || !password) {
-			$('#comment-error').html('Vui lòng nhập đầy đủ các trường bắt buộc!');
+		if (!text) {
+			$('#comment-error').html('Vui lòng nhập nội dung bình luận!');
 			return;
 		}
+		let newComment = { text, parentCommentId: this.state.replyToCommentThread };
+		if (!this.props.user.me) {
+			const fullName = $('#author').val();
+			const email = $('#email').val();
+			const password = $('#password').val();
+			if (!text || !fullName || !email || !password) {
+				$('#comment-error').html('Vui lòng nhập đầy đủ các trường bắt buộc!');
+				return;
+			}
+			newComment = { ...newComment, fullName, email, password };
+		}
 		$('#comment-error').html('');
-		const newComment = { text, fullName, email, password, parentCommentId: this.state.replyToCommentThread };
 		await this.props.dispatch(createComment(this.state.title, newComment));
 		if (this.props.comment.error) {
 			$('#comment-error').html(this.props.comment.error);
@@ -157,7 +160,7 @@ export default class ArticleDetails extends Component {
 		} else {
 			$('#respond input').val('');
 			$('#respond textarea').val('');
-			$('#comment-text').attr('placeholder',"Nhập bình luận ở đây");
+			$('#comment-text').attr('placeholder', "Nhập bình luận ở đây");
 			Swal.fire({
 				title: 'Viết bình luận thành công!',
 				icon: 'success',
@@ -309,10 +312,8 @@ export default class ArticleDetails extends Component {
 										<div id="commentform" className="comment-form">
 											<textarea type="text" id="comment-text" rows="4" style={{ width: '100%', resize: 'none' }} placeholder="Nhập bình luận ở đây" />
 										</div>
-										<div id="comment-form-identity">
-											<div id="comment-form-nascar">
-												<p>Điền thông tin vào ô dưới đây để  bình luận</p>
-											</div>
+										<div id="comment-form-identity" style={{ display: this.props.user.me ? 'none' : 'block' }}>
+											<div id="comment-form-nascar">Điền thông tin vào ô dưới đây để  bình luận</div>
 											<div id="comment-form-guest" className="comment-form-service selected">
 												<div className="comment-form-padder">
 													<div className="comment-form-fields">
@@ -330,15 +331,15 @@ export default class ArticleDetails extends Component {
 																<input id="password" type="password" style={{ width: '100%' }} />
 															</div>
 														</div>
-														<p id="comment-error" style={{ color: 'red' }}></p>
-														<button type="submit" id="comment-submit" className="submit wp-block-button__link" style={{ marginTop: 15 }} onClick={this.addComment.bind(this)}>
-															Gửi bình luận
-														</button>
 													</div>
 												</div>
 											</div>
 
 										</div>
+										<p id="comment-error" style={{ color: 'red' }}></p>
+										<button type="submit" id="comment-submit" className="submit wp-block-button__link" style={{ marginTop: 15 }} onClick={this.addComment.bind(this)}>
+											Gửi bình luận
+										</button>
 									</div>
 
 								</div>
