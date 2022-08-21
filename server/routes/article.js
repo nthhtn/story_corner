@@ -98,7 +98,7 @@ router.route('/title/:title')
 
 router.route('/title/:title/comments')
 	.get(async (req, res) => {
-		const article = await Article.findOne({ title: req.params.title });
+		const article = await Article.findOne({ title: decodeURIComponent(req.params.title) });
 		let commentThreads = await Comment.find({ articleId: article._id, parentCommentId: null }).sort({ createdAt: -1 })
 			.populate({ path: 'commenterId', select: ['fullName', 'avatar'] })
 			.lean()

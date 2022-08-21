@@ -232,7 +232,7 @@ export default class ArticleDetails extends Component {
 										</h2>
 
 										<p className="author-bio">
-											<a className="author-link" href="https://gocnhoannie.com/author/gocnhoannie/" rel="author">View All Posts</a>
+											<a className="author-link" href="/" rel="author">View All Posts</a>
 										</p>
 									</div>
 								</div>

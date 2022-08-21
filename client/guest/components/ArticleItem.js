@@ -11,12 +11,13 @@ export default class ArticleItem extends Component {
 
 	render() {
 		let { _id, title, content, coverImg, createdAt, categoryId } = this.props;
+		let titleUrl = encodeURIComponent(title);
 		return (
 			<article id="post-3000"
 				className="post-3000 post type-post status-publish format-standard has-post-thumbnail hentry category-tan-man tag-tanman">
 
 				<div className="featured-image">
-					<a href={`/articles/${title}`}>
+					<a href={`/articles/${titleUrl}`}>
 						<svg className="paperclip" version="1.1" id="Layer_1" x="0px" y="0px" width="168px"
 							height="569px" viewBox="0 0 168 569" style={{ "enableBackground": "new 0 0 168 569" }}
 							aria-hidden="true">
@@ -28,7 +29,7 @@ export default class ArticleItem extends Component {
 							className="attachment-scratchpad-featured size-scratchpad-featured wp-post-image"
 							alt="" loading="lazy"
 							srcSet={coverImg}
-							data-permalink={`/articles/${title}`}
+							data-permalink={`/articles/${titleUrl}`}
 							data-orig-file={coverImg}
 							data-image-title={title}
 						/>
@@ -39,14 +40,14 @@ export default class ArticleItem extends Component {
 					<span className="cat-links"><span className="screen-reader-text">Posted in&nbsp;</span> <a
 						href={"/articles/category/" + categoryId.name} rel="category tag">{categoryId.displayName}</a></span>
 					<h2 className="entry-title"><a
-						href={"/articles/" + title}
+						href={"/articles/" + titleUrl}
 						rel="bookmark">{title}</a></h2>
 					<div className="entry-meta">
 						<span className="posted-on">
-							<a href={"articles/" + title} rel="bookmark">Posted on&nbsp;
+							<a href={"articles/" + titleUrl} rel="bookmark">Posted on&nbsp;
 								<time className="entry-date published" dateTime={createdAt}>{$.format.date(createdAt, "dd/MM/yyyy")}</time>
 								<time className="updated" dateTime={createdAt}>{createdAt}</time></a></span><span className="byline"> by&nbsp;
-							<span className="author vcard"><a className="url fn n" href={"/articles/" + title}>Annie</a></span>
+							<span className="author vcard"><a className="url fn n" href={"/articles/" + titleUrl}>Annie</a></span>
 						</span>
 					</div>
 				</header>
@@ -54,7 +55,7 @@ export default class ArticleItem extends Component {
 				<div className="entry-content">
 
 					<p>{getBriefHtmlContent(content)}
-						<a href={"/articles/" + title} className="more-link">
+						<a href={"/articles/" + titleUrl} className="more-link">
 							Đọc tiếp
 							<span className="screen-reader-text">&#8220;{title}&#8221;</span>
 							<span className="meta-nav">&rarr;</span></a>
