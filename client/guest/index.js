@@ -62,6 +62,10 @@ store.dispatch(getMyProfile())
 												className="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-659">
 												<a href="/articles/category/tan man">Tản mạn</a>
 											</li>
+											<li id="menu-item-659"
+												className="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-659">
+												<a href="/articles/category/lich su han quoc">Lịch sử Hàn Quốc</a>
+											</li>
 											{
 												store.getState().user.me?.role === 'admin' &&
 												(<li id="menu-item-659"
