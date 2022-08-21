@@ -11,6 +11,7 @@ export default class ArticleItem extends Component {
 
 	render() {
 		let { _id, title, content, coverImg, createdAt, categoryId } = this.props;
+		console.log(this.props);
 		let titleUrl = encodeURIComponent(title);
 		return (
 			<article id="post-3000"
@@ -46,8 +47,9 @@ export default class ArticleItem extends Component {
 						<span className="posted-on">
 							<a href={"articles/" + titleUrl} rel="bookmark">Posted on&nbsp;
 								<time className="entry-date published" dateTime={createdAt}>{$.format.date(createdAt, "dd/MM/yyyy")}</time>
-								<time className="updated" dateTime={createdAt}>{createdAt}</time></a></span><span className="byline"> by&nbsp;
-							<span className="author vcard"><a className="url fn n" href={"/articles/" + titleUrl}>Annie</a></span>
+								<time className="updated" dateTime={createdAt}>{createdAt}</time></a></span><span className="byline">
+									{/* by&nbsp;
+							<span className="author vcard"><a className="url fn n" href={"/articles/" + titleUrl}>Annie</a></span> */}
 						</span>
 					</div>
 				</header>

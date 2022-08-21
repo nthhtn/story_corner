@@ -222,13 +222,13 @@ export default class ArticleDetails extends Component {
 
 
 								<div className="author-info clear">
-									<div className="author-avatar">
-										<span className="avatar-container"><img alt="" src={current?.authorId.avatar} className="avatar avatar-100 photo" height="100" width="100" loading="lazy" /></span>	</div>
+									<div className="author-avatar" style={{backgroundImage: `url("${current?.authorId.avatar}")`}}>
+									</div>
 
 									<div className="author-description">
 										<h2 className="author-title">
 											<span className="author-heading">Author:&nbsp;</span>
-											<a href="https://gocnhoannie.com/author/gocnhoannie/" rel="author">{current?.authorId.fullName}</a>
+											<a href="/" rel="author">{current?.authorId.fullName}</a>
 										</h2>
 
 										<p className="author-bio">
